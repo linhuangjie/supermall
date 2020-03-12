@@ -1,8 +1,8 @@
 <template>
    <div class="wrapper" ref="aaa">
-      <!-- <h2>分类</h2> -->
+      <h2>分类</h2>
       <div class="content">
-          <ul>
+          <!-- <ul>
               <li>分类列表1</li>
               <li>分类列表2</li>
               <li>分类列表3</li>
@@ -103,13 +103,13 @@
               <li>分类列表98</li>
               <li>分类列表99</li>
               <li>分类列表100</li>
-          </ul>
+          </ul> -->
       </div>
   </div>
 </template>
 
 <script>
-import BScroll from 'better-scroll'
+// import BScroll from 'better-scroll'
 
 export default {
     name: 'Category',
@@ -129,17 +129,17 @@ export default {
         // console.log(this.$refs.aaa)
         // console.log(document.querySelector('.wrapper'))
         
-        this.scroll = new BScroll(document.querySelector('.wrapper'), {
+        // this.scroll = new BScroll(document.querySelector('.wrapper'), {
 
-        })
+        // })
     }
 }
 </script>
 
-<style>
+<style scoped>
     .wrapper {
         height: 150px;
-        background-color: red;
+        /* background-color: red; */
         overflow: hidden;
         
         /* overflow-y: scroll; */
