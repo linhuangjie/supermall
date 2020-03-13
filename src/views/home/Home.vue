@@ -67,7 +67,8 @@ export default {
         currentType: 'pop',
         isShowBackTop: false,
         tabOffsetTop: 0,
-        isTabFixed: false
+        isTabFixed: false,
+        saveY: 0
       }
     },
     computed: {
@@ -89,8 +90,16 @@ export default {
       this.$bus.$on('itemImageLoad', () => {
         refresh()
       })
-
-      
+    },
+    destroyed() {
+      console.log('home destroyed')
+    },
+    activated() {
+      this.$refs.scroll.scrollTo(0, this.saveY, 0)
+      this.$refs.scroll.refresh()
+    },
+    deactivated() {
+      this.saveY = this.$refs.scroll.getScrollY()
     },
     methods: {
       // 事件监听相关的方法
