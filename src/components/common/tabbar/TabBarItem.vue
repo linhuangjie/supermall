@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<script>
+<script scoped>
 export default {
     name: 'TabBarItem',
     props: {
@@ -40,7 +40,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .active {
   color: #f00;
 }
