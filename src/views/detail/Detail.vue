@@ -7,6 +7,8 @@
             <detail-shop-info :shop="shop"/>
             <detail-goods-info :detail-info="detailInfo" @imageLoad="imageLoad"/>
             <detail-param-info :params-info="paramsInfo"/>
+            <detail-comment-info :comment-info="commentInfo"/>
+            <goods-list :goods="recommends"/>
      </scroll>
   </div>
 </template>
@@ -18,10 +20,12 @@ import DetailBaseInfo from './childComps/DetailBaseInfo'
 import DetailShopInfo from './childComps/DetialShopInfo'
 import DetailGoodsInfo from './childComps/DetailGoodsInfo'
 import DetailParamInfo from './childComps/DetailParamInfo'
+import DetailCommentInfo from './childComps/DetailCommentInfo'
 
 import Scroll from 'components/common/scroll/Scroll'
+import GoodsList from 'components/content/goods/GoodsList'
 
-import {getDetail, Goods, Shop, GoodsParam} from 'network/detail'
+import {getDetail, Goods, Shop, GoodsParam, getRecommends} from 'network/detail'
 
 
 export default {
@@ -33,7 +37,9 @@ export default {
             goods: {},
             shop: {},
             detailInfo: {},
-            paramsInfo: {}
+            paramsInfo: {},
+            commentInfo: {},
+            recommends: []
         }
     },
     components: {
@@ -43,12 +49,14 @@ export default {
         DetailShopInfo,
         DetailGoodsInfo,
         DetailParamInfo,
-        Scroll
+        DetailCommentInfo,
+        Scroll,
+        GoodsList
     },
     created() {
-        // 保存传入的iid
+        // 1.保存传入的iid
         this.iid = this.$route.params.iid;
-        // 根据iid请求详情数据
+        // 2.根据iid请求详情数据
         getDetail(this.iid).then(res => {
             console.log(res)
             const data = res.result
@@ -62,6 +70,14 @@ export default {
             this.detailInfo = data.detailInfo
             //5.获取商品参数信息
             this.paramsInfo = new GoodsParam(data.itemParams.info, data.itemParams.rule)
+            // 6.获取评论信息
+            if(data.rate.cRate) {
+                this.commentInfo = data.rate.list[0]
+            }
+        })
+        // 3.获取推荐数据
+        getRecommends().then(res => {
+            this.recommends = res.data.list
         })
     },
     methods: {
