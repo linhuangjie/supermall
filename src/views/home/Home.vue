@@ -41,6 +41,7 @@ import Scroll from 'components/common/scroll/Scroll'
 import BackTop from 'components/content/backTop/BackTop'
 
 import {getHomeMultidata, getHomeGoods} from 'network/home'
+import {itemImgListenerMixin} from 'common/mixin'
 import {debounce} from 'common/utils'
 
 export default {
@@ -71,6 +72,7 @@ export default {
         saveY: 0
       }
     },
+    mixins: [itemImgListenerMixin],
     computed: {
       showGoods() {
         return this.goods[this.currentType].list
@@ -85,11 +87,6 @@ export default {
      this.getHomeGoods('sell')
     },
     mounted() {
-       // 3.监听item中图片加载完成
-       const refresh = debounce(this.$refs.scroll.refresh)
-      this.$bus.$on('itemImageLoad', () => {
-        refresh()
-      })
     },
     destroyed() {
       console.log('home destroyed')
@@ -99,7 +96,10 @@ export default {
       this.$refs.scroll.refresh()
     },
     deactivated() {
+      // 1.保存Y值
       this.saveY = this.$refs.scroll.getScrollY()
+      // 2.取消图片加载监听
+      this.$bus.$off('itemImageLoad', this.itemImgLink)
     },
     methods: {
       // 事件监听相关的方法
