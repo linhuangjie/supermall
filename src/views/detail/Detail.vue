@@ -10,7 +10,8 @@
             <detail-comment-info ref="comment" :comment-info="commentInfo"/>
             <goods-list ref="recommend" :goods="recommends"/>
      </scroll>
-     <detail-bottom-bar/>
+     <back-top @click.native="backTop" v-show="isShowBackTop"/>
+     <detail-bottom-bar @addTOCart="addTOCart"/>
   </div>
 </template>
 
@@ -28,7 +29,7 @@ import Scroll from 'components/common/scroll/Scroll'
 import GoodsList from 'components/content/goods/GoodsList'
 
 import {getDetail, Goods, Shop, GoodsParam, getRecommends} from 'network/detail'
-import {itemImgListenerMixin} from 'common/mixin'
+import {itemImgListenerMixin, backTopMixin} from 'common/mixin'
 import {debounce} from 'common/utils'
 
 export default {
@@ -48,7 +49,7 @@ export default {
             countentIndex: 0
         }
     },
-    mixins: [itemImgListenerMixin],  //混入
+    mixins: [itemImgListenerMixin, backTopMixin],  //混入
     components: {
         DetailNavBar,
         DetailSwiper,
@@ -139,7 +140,7 @@ export default {
             this.getThemeTopY()
         },
         titlesClick(index) {
-            this.$refs.scroll.scrollTo(0, -this.temeTopYs[index], 300)
+            this.$refs.scroll.scrollTo(0, -(this.temeTopYs[index] - 44), 300)
         },
         countentScroll(position) {
             //1. 获取y值
@@ -166,8 +167,17 @@ export default {
                 //     // console.log(this.countentIndex)
                 //     this.$refs.nav.currentIndex = this.countentIndex
                 // }
-                
+                this.listenBackTop(position)
             }
+        },
+        addTOCart() {
+            const product = {}
+            product.image = this.topImages[0];
+            product.title = this.goods.title;
+            product.desc = this.goods.desc;
+            product.price = this.goods.realPrice;
+            product.iid = this.iid;
+            this.$store.commit('addCart', product)
         }
     }
 }
@@ -181,7 +191,7 @@ export default {
         height: 100vh;
     }
     .content {
-        height: calc(100% - 44px);
+        height: calc(100% - 44px - 49px);
     }
     .detail-nav {
         position: relative;
