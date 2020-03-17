@@ -12,12 +12,16 @@ const store = new Vuex.Store({
     mutations: {
         addCart(state, payload) {
             // payload添加新的商品
-            let oldProduct = null
-            for(let item of state.cartList) {
-                if(item.iid === payload,iid) {
-                    oldProduct = item
-                }
-            }
+            // 数组有哪些方法? push/pop/unshift/shift/sort/reverse/map/filter/reduce/join
+            // let oldProduct = null
+            // for(let item of state.cartList) {
+            //     if(item.iid === payload,iid) {
+            //         oldProduct = item
+            //     }
+            // }
+
+            let oldProduct = state.cartList.find(item => item.iid === payload,iid)
+
             if(oldProduct) {
                 oldProduct.count += 1
             }else {
