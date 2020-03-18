@@ -93,7 +93,7 @@ export default {
       console.log('home destroyed')
     },
     activated() {
-      this.$refs.scroll.scrollTo(0, this.saveY, 0)
+      this.$refs.scroll.scrollTo(0, this.saveY, 1)
       this.$refs.scroll.refresh()
     },
     deactivated() {
