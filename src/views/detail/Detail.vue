@@ -31,6 +31,7 @@ import GoodsList from 'components/content/goods/GoodsList'
 import {getDetail, Goods, Shop, GoodsParam, getRecommends} from 'network/detail'
 import {itemImgListenerMixin, backTopMixin} from 'common/mixin'
 import {debounce} from 'common/utils'
+import {mapActions} from 'vuex'
 
 export default {
     name: 'Detail',
@@ -46,7 +47,8 @@ export default {
             recommends: [],
             temeTopYs: [],
             getThemeTopY: null,
-            countentIndex: 0
+            countentIndex: 0,
+            message: ''
         }
     },
     mixins: [itemImgListenerMixin, backTopMixin],  //混入
@@ -133,6 +135,7 @@ export default {
          this.$bus.$off('itemImageLoad', this.itemImgLinkener)
     },
     methods: {
+        ...mapActions(['addCart']),
         imageLoad() {
             // this.$refs.scroll.refresh()
             // console.log('-----')
@@ -178,7 +181,22 @@ export default {
             product.price = this.goods.realPrice;
             product.iid = this.iid;
             // this.$store.commit('addCart', product)
-            this.$store.dispatch('addCart', product)
+            this.addCart(product).then(res => {
+            //     console.log(res) 
+            //     this.show = true 
+            //     this.message = res
+
+            //     setTimeout(() => {
+            //        this.show = false 
+            //         this.message = ''
+            //     }, 1500)
+                // console.log(this.$toast)
+               this.$toast.show(res, 2000)
+            })
+            
+            // this.$store.dispatch('addCart', product).then(res => {
+            //     console.log(res)
+            // })
         }
     }
 }
